@@ -1,4 +1,4 @@
-function News() {
+﻿function News() {
   return <h1>News Page</h1>;
 }
 

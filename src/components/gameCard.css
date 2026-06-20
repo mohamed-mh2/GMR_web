@@ -1,0 +1,45 @@
+.game-card {
+  background: #1A0C0C;
+  border: 1px solid #3A1212;
+  border-radius: 14px;
+  overflow: visible;
+  height: auto;
+  width: 100%;
+  max-width: 12rem;
+  position: relative;
+  color: #989595;
+  margin-bottom: 1.25rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.game-card img {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1 / 1.3;
+  object-fit: cover;
+  border-radius: 0.875rem 0.875rem 0 0;
+}
+
+.game-card h3 {
+  margin: 0.75rem 0.75rem 0.25rem;
+  font-size: 1rem;
+  color: #fff;
+}
+
+.game-card p {
+  margin: 0 0.75rem 0.75rem;
+  color: #9aa3b8;
+  font-size: 0.8125rem;
+}
+
+
+.prices {
+  display: flex;
+  border-radius: 4px;
+}
+.prices p{
+    color: #9aa3b8;
+    font-size: 10px;
+    width: 100%;
+}
