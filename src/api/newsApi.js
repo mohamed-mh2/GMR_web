@@ -1,11 +1,6 @@
-const API_KEY = "pub_fc4e854139a84bb9b15ac751048d3e6c";
-const BASE_URL = "https://gnews.io/api/v4";
-
 export async function getGamingNews() {
   const response = await fetch(
-    `${BASE_URL}/search?q=gaming&lang=en&max=10&apikey=${API_KEY}`
-  );
-
+`https://6a381ecdc105017aa639ac4d.mockapi.io/news`  );
   if (!response.ok) {
     const text = await response.text();
     throw new Error(
@@ -14,5 +9,5 @@ export async function getGamingNews() {
   }
 
   const data = await response.json();
-  return data.articles;
+  return data;
 }
