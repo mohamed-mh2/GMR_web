@@ -1,4 +1,7 @@
-nav{
+ nav{
+    position: sticky;
+    top: 0;
+    z-index: 100;
     background: linear-gradient(to left, #0F0808, #1A0B0B);
     display: flex;
     align-items: center;
@@ -6,10 +9,11 @@ nav{
     gap: 20px;  
     border-radius:0 20px;
     width: 100%;
-}
+ }   
 
-h2{
+.nav-link h1 {
     font-family:fantasy;
+    font-size: 2rem;
 }
 
 .logo{
@@ -17,7 +21,6 @@ h2{
     align-items: center;
     justify-content: center;
     gap: 10px;
-    font-size: 1.6rem;
     color: #ffffff;
 }
 
@@ -29,7 +32,7 @@ h2{
 
 .nav-link{
     margin-left: 20vh;
-    font-size: 0.87rem;
+    font-size: 1.3rem;
     display: flex;
     align-items: center;
     justify-content: flex-start;
@@ -41,8 +44,10 @@ h2{
     background-color: #1A0C0C;
     padding: 5px;
     border: 1px solid #3A1212;
-    border-radius: 4px;
-    width: 40vh;
+    border-radius: 8px;
+    width: 45vh;
+    height: 2.8vh;
+    color: #fff;
 }
 
 .nav-link a{
@@ -67,7 +72,7 @@ h2{
 }
 
 button.theme-toggle{
-    font-size: 0.68rem;
+    font-size: 1.3rem;
     background-color: #1A0C0C;
     color: #FEC357;
     border: 1px solid #3A1212;
@@ -79,7 +84,7 @@ button.theme-toggle{
 
 .nav-account{
     color: #989595;
-    font-size: 0.87rem;
+    font-size: 1.3rem;
     background-color: #1A0C0C;
     border: 1px solid #3A1212;
     border-radius: 7px;
@@ -103,7 +108,7 @@ svg{
 
 .nav-signin{
     color: #eee5e5;
-    font-size: 0.87rem;
+    font-size: 1.2rem;
     background-color: red;
     border: 1px solid #3A1212;
     border-radius: 7px;

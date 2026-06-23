@@ -1,8 +1,8 @@
-const apikey = "b9ae5e154e864a1985c1d00025ee238e";
+
 
 async function gamedata() {
     try {
-        const response = await fetch(`https://api.rawg.io/api/games?key=${apikey}`);
+        const response = await fetch(`https://6a37d27fc105017aa6395867.mockapi.io/games`);
         const data = await response.json();
         return data;
     } catch (error) {
@@ -10,7 +10,5 @@ async function gamedata() {
         throw error;
     }
 }
-
-gamedata()
 
 export { gamedata };
