@@ -4,7 +4,8 @@
 
 body {
   margin: 0;
-  background: #070912;
+  /* min-height: 100vh; */
+  background: linear-gradient(to right, #0F0808, #1A0B0B);
   color: white;
   font-family: Arial, sans-serif;
 }
@@ -18,3 +19,5 @@ button,
 input {
   font-family: inherit;
 }
+
+

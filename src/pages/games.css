@@ -1,0 +1,102 @@
+.games-page{
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    gap: 20px;
+    margin-top: 20px;
+    transform: translateX(200px);
+}
+
+.gamespage-title{
+    font-family: fantasy;
+    display: flex;
+    align-items: center;
+    justify-content:flex-start;
+    color: #fff;
+    position: relative;
+    font-size: 3.5rem;
+}
+
+.gamespage-title::after{
+    content: '';
+    position: absolute;
+    bottom:20px;
+    left: 0;
+    width: 3%;
+    height: 5px;
+    background-color: #B91C1C;
+}
+.gamespage-title p{
+    padding-left: 10px;
+    color: #B91C1C;
+}
+
+.game-list{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+}
+
+.games-container{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+    width: 100%;
+}   
+
+
+.filter{
+    display: flex;
+    align-items: center;
+    justify-items: flex-start;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+.filter input{
+    color: #fff;
+    background-color: #1A0C0C;
+    border: 2px solid #3A1212;
+    border-radius: 8px;
+    font-size: 1.6rem;
+    padding: 5px 10px;
+}
+.filter select{
+    color: #9CA3AF;
+    background-color: #1A0C0C;
+    border: 2px solid #3A1212;
+    border-radius: 8px;
+    font-size: 1.3rem;
+    padding: 5px 10px;
+    cursor: pointer;
+}
+.filter option{
+    color: #9CA3AF;
+    background-color: #1A0C0C;
+    border: 2px solid #3A1212;
+    font-size: 1.3rem;
+    padding: 5px 10px;
+}
+
+
+.game-list{
+    display: flex;
+    justify-content: flex-start;
+    gap: 15vh;
+    flex-wrap: wrap;
+    border: 1px solid #3A1212;
+    border-radius: 10px;
+    padding: 20px;
+    background-color: #1A0C0C;
+    margin-bottom: 40px;
+}
+.game-list button{
+    background: none;
+    color: #9CA3AF;
+    font-size: 1.2rem;
+    border: none;
+    border-radius: 5px;
+    padding: 5px 10px;
+    cursor: pointer;
+}

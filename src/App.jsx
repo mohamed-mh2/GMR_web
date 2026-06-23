@@ -1,5 +1,7 @@
 import { Routes, Route } from "react-router-dom";
 
+import "./Index.css";
+
 import Navbar from "./components/Navbar.jsx";
 
 import Home from "./pages/Home.jsx";
@@ -18,7 +20,7 @@ export default function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/games" element={<Games />} />
-        <Route path="/games/:id" element={<GameDetail />} />
+        <Route path="/gamedetail/:id" element={<GameDetail />} />
         <Route path="/news" element={<News />} />
         <Route path="/about" element={<About />} />
         <Route path="/account" element={<Account />} />
