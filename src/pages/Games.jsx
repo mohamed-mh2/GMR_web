@@ -74,14 +74,14 @@ function Game() {
     </div>
 
     <div className="game-list">
-      <button onClick={() => setActiveGenre("All")}>All</button>
-      <button onClick={() => setActiveGenre("Action")}>Action</button>
-      <button onClick={() => setActiveGenre("RPG")}>RPG</button>
-      <button onClick={() => setActiveGenre("Horror")}>Horror</button>
-      <button onClick={() => setActiveGenre("Multiplayer")}>Multiplayer</button>
-      <button onClick={() => setActiveGenre("Strategy")}>Strategy</button>
-      <button onClick={() => setActiveGenre("Story")}>Story</button>
-      <button onClick={() => setActiveGenre("Open World")}>Open World</button>
+      <button className={activeGenre === "All" ? "active" : ""} onClick={() => setActiveGenre("All")}>All</button>
+      <button className={activeGenre === "Action" ? "active" : ""} onClick={() => setActiveGenre("Action")}>Action</button>
+      <button className={activeGenre === "RPG" ? "active" : ""} onClick={() => setActiveGenre("RPG")}>RPG</button>
+      <button className={activeGenre === "Horror" ? "active" : ""} onClick={() => setActiveGenre("Horror")}>Horror</button>
+      <button className={activeGenre === "Multiplayer" ? "active" : ""} onClick={() => setActiveGenre("Multiplayer")}>Multiplayer</button>
+      <button className={activeGenre === "Strategy" ? "active" : ""} onClick={() => setActiveGenre("Strategy")}>Strategy</button>
+      <button className={activeGenre === "Story" ? "active" : ""} onClick={() => setActiveGenre("Story")}>Story</button>
+      <button className={activeGenre === "Open World" ? "active" : ""} onClick={() => setActiveGenre("Open World")}>Open World</button>
     </div>
 
     <div className="games-container">

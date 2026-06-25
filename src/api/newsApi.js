@@ -11,7 +11,3 @@ export async function getGamingNews() {
   const data = await response.json();
   return data;
 }
-
-getGamingNews()
-
-console.log(getGamingNews());

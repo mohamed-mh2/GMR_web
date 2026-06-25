@@ -1,10 +1,16 @@
+import { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
 import "./navbar.css";
 import gamepad from "../img/gamepad.png";
-import profile_icon from "../img/profile_icon.webp";
 
 
 export default function Navbar() {
+  const [isDayMode, setIsDayMode] = useState(() => localStorage.getItem("theme") === "day");
+
+  useEffect(() => {
+    document.body.classList.toggle("day-mode", isDayMode);
+    localStorage.setItem("theme", isDayMode ? "day" : "dark");
+  }, [isDayMode]);
 
   return (
     <nav>
@@ -21,7 +27,9 @@ export default function Navbar() {
       </div>
 
       <div className="right-nav">
-        <button className="theme-toggle">🔆 Day</button>
+        <button className="theme-toggle" onClick={() => setIsDayMode((currentMode) => !currentMode)}>
+          {isDayMode ? "🌙 Night" : "🔆 Day"}
+        </button>
         <NavLink to="/account" className="nav-account">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"  fill="currentColor" className="profile-icon">
             <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />

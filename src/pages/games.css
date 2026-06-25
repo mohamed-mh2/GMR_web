@@ -43,7 +43,7 @@
     flex-wrap: wrap;
     gap: 20px;
     justify-content: center;
-    width: 100%;
+    width: 90%;
 }   
 
 
@@ -83,13 +83,12 @@
 .game-list{
     display: flex;
     justify-content: flex-start;
-    gap: 15vh;
     flex-wrap: wrap;
     border: 1px solid #3A1212;
     border-radius: 10px;
-    padding: 20px;
     background-color: #1A0C0C;
     margin-bottom: 40px;
+    width: 90%;
 }
 .game-list button{
     background: none;
@@ -99,4 +98,21 @@
     border-radius: 5px;
     padding: 5px 10px;
     cursor: pointer;
+    width: 11%;
+    height: 4vh;
+}
+
+
+.game-list button:hover{
+    background-color: #3A1212;
+    color: #fff;
+    background-color: #3A1212;
+    color: #fff;
+}
+
+.game-list button.active{
+    background-color: #3A1212;
+    color: #fff;
+    background-color: #3A1212;
+    color: #fff;
 }

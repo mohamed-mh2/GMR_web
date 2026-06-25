@@ -1,3 +1,10 @@
+.news-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+
 .news {
   border: 1px solid transparent;
   padding: 16px;
