@@ -21,6 +21,7 @@ export default function Navbar() {
         <NavLink to="/">Home</NavLink>
         <NavLink to="/games">Games</NavLink>
         <NavLink to="/news">News</NavLink>
+        <NavLink to="/ai-agent">AI Agent</NavLink>
         <NavLink to="/about">About</NavLink>
         <input className="search-input" type="text" placeholder=" Search games..."  />
 

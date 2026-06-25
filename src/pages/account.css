@@ -114,3 +114,39 @@
   width: min(520px, 100%);
   text-align: center;
 }
+
+.account-saved-game {
+  width: 220px;
+  background-color: #1A0C0C;
+  border: 1px solid #3A1212;
+  border-radius: 10px;
+  overflow: hidden;
+  text-align: center;
+}
+
+.account-saved-game a {
+  color: #fff;
+  text-decoration: none;
+}
+
+.account-saved-game img {
+  width: 100%;
+  height: 260px;
+  object-fit: cover;
+  background-color: #0F0808;
+}
+
+.account-saved-game h3,
+.account-saved-game p {
+  margin: 10px;
+}
+
+.account-remove-button {
+  color: #fff;
+  background-color: #B91C1C;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 14px;
+  margin: 0 0 14px;
+  cursor: pointer;
+}

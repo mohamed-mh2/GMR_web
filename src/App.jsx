@@ -11,6 +11,7 @@ import News from "./pages/News.jsx";
 import About from "./pages/About.jsx";
 import Account from "./pages/Account.jsx";
 import SignIn from "./pages/SignIn.jsx";
+import AiAgent from "./components/AiAgent.jsx";
 
 export default function App() {
   return (
@@ -23,6 +24,7 @@ export default function App() {
         <Route path="/gamedetail/:id" element={<GameDetail />} />
         <Route path="/news" element={<News />} />
         <Route path="/about" element={<About />} />
+        <Route path="/ai-agent" element={<AiAgent />} />
         <Route path="/account" element={<Account />} />
         <Route path="/signin" element={<SignIn />} />
       </Routes>
