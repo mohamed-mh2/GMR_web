@@ -14,7 +14,7 @@ function News() {
   const featuredNews = news[0];
 
  return (
-  <div>
+  <div className="news-page">
     <h1>Gaming News</h1>
 
   <div className="news-layout">
@@ -34,31 +34,18 @@ function News() {
   <NewsCard key={item.id} item={item} />
 ))}
   </div>
+
+
 <div className="upcoming-box">
   <h2>Upcoming Releases</h2>
 
-  <div>
-    <h4>GTA VI</h4>
-    <p>Action</p>
-    <p>Fall 2025</p>
-  </div>
-
-  <div>
-    <h4>Monster Hunter Wilds</h4>
-    <p>Action RPG</p>
-    <p>Early 2025</p>
-  </div>
-
-  <div>
-    <h4>Death Stranding 2</h4>
-    <p>Action</p>
-    <p>2025</p>
-  </div>
 </div>
 
   </div>
 
-  </div>  
+  </div>
+ 
+
 );
 }
 export default News;

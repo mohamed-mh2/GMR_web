@@ -1,0 +1,116 @@
+.account-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+  padding: 40px 20px;
+}
+
+.profile-section {
+  width: min(720px, 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  background-color: #1A0C0C;
+  border: 1px solid #3A1212;
+  border-radius: 14px;
+  padding: 30px;
+}
+
+.account-image {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  border: 2px solid #B91C1C;
+  object-fit: cover;
+  background-color: #0F0808;
+}
+
+.profile-section h1,
+.profile-section p {
+  margin: 0;
+}
+
+.profile-section p {
+  color: #9CA3AF;
+}
+
+.account-error {
+  color: #fca5a5;
+}
+
+.edit-profile-button,
+.account-container button,
+.edit-profile-actions button {
+  color: #fff;
+  background-color: #B91C1C;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 14px;
+  cursor: pointer;
+}
+
+.edit-profile-form {
+  width: min(420px, 100%);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 10px;
+}
+
+.edit-profile-form input {
+  color: #fff;
+  background-color: #0F0808;
+  border: 1px solid #3A1212;
+  border-radius: 8px;
+  padding: 10px 12px;
+}
+
+.edit-profile-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+}
+
+.edit-profile-actions button:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+.edit-profile-actions button[type="button"] {
+  background-color: #3A1212;
+}
+
+.profile-message {
+  color: #FCA5A5;
+}
+
+.account-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.account-container button.active {
+  background-color: #3A1212;
+  border: 2px solid #B91C1C;
+}
+
+.account-games-list {
+  width: min(1100px, 100%);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+}
+
+.account-empty {
+  color: #9CA3AF;
+  background-color: #1A0C0C;
+  border: 1px solid #3A1212;
+  border-radius: 10px;
+  padding: 20px;
+  width: min(520px, 100%);
+  text-align: center;
+}

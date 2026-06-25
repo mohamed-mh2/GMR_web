@@ -1,29 +1,29 @@
 import './gameCard.css';
 
 export default function GameCard({ game }) {
-  // Helper function to format price based on platform availability
+  const isUpcoming = game.status?.trim().toLowerCase() === 'upcoming';
+
   const formatPrice = (platformName, price) => {
-    // If platform not available, return N/A
     if (!game.platforms?.includes(platformName)) return 'N/A';
-    // If price is 0, it's free
+    if (isUpcoming && (price === 0 || price === undefined || price === null)) return 'TBA';
     if (price === 0) return 'Free';
-    // Otherwise return formatted price
     if (price === undefined || price === null) return 'N/A';
     return `$${parseFloat(price).toFixed(2)}`;
   };
 
-  // Get platform prices
+
   const pcPrice = formatPrice('PC', game.prices?.pc);
   const ps5Price = formatPrice('PS5', game.prices?.ps5);
   const xboxPrice = formatPrice('Xbox', game.prices?.xbox);
 
   return (
     <div className="game-card">
+      {isUpcoming && <span className="game-status-badge">Upcoming</span>}
       {game.image && <img src={game.image} alt={game.title} />}
       <h3>{game.title}</h3>
       {game.genres && <p>{Array.isArray(game.genres) ? game.genres.join(', ') : game.genres}</p>}
       {game.year && <p>Year: {game.year}</p>}
-      {game.rating && <p>Rating: {game.rating}</p>}
+      {game.rating && <p className='gamerating'>⭐ {game.rating}</p>}
       <div className="prices">
         <>
           <p>PC: {pcPrice}</p>
