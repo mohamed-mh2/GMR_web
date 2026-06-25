@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { gamedata } from "../api/gameApi";
-import { createComment, deleteComment, getComments } from "../api/commentsApi";
+import { createComment, getComments } from "../api/commentsApi";
 import { createUserGame, deleteUserGame, getUserGames, updateUserGame } from "../api/usergamesApi";
 import "./gameDetail.css";
 import GameCard from "../components/GameCard";
@@ -14,53 +14,6 @@ function getGameId(game) {
   return String(game.id ?? game.title);
 }
 
-function getGameCommentIds(game, allGames) {
-  const gameIndex = allGames.findIndex((item) => item.title === game.title);
-  const ids = [getGameId(game), game.title];
-
-  if (gameIndex !== -1) {
-    ids.push(String(gameIndex + 1));
-  }
-
-  return ids;
-}
-
-async function saveUserGame(user, game, status) {
-  const gameId = getGameId(game);
-  const userGames = await getUserGames();
-  const existingUserGame = userGames.find(
-    (item) => String(item.userId) === String(user.id)
-      && String(item.gameId) === gameId
-      && item.status?.trim().toLowerCase() === status
-  );
-
-  const userGameData = {
-    userId: user.id,
-    gameId,
-    status,
-    userRating: existingUserGame?.userRating ?? null,
-    dateAdded: new Date().toISOString(),
-  };
-
-  if (existingUserGame) {
-    return updateUserGame(existingUserGame.id, { ...existingUserGame, ...userGameData });
-  }
-
-  return createUserGame(userGameData);
-}
-
-async function removeUserGame(user, game, status) {
-  const gameId = getGameId(game);
-  const userGames = await getUserGames();
-  const matchingUserGames = userGames.filter(
-    (item) => String(item.userId) === String(user.id)
-      && String(item.gameId) === gameId
-      && item.status?.trim().toLowerCase() === status
-  );
-
-  await Promise.all(matchingUserGames.map((item) => deleteUserGame(item.id)));
-}
-
 function GameDetail() {
   const { id } = useParams();
   const gameTitle = decodeURIComponent(id);
@@ -71,7 +24,7 @@ function GameDetail() {
   const [error, setError] = useState(null);
   const [actionMessage, setActionMessage] = useState("");
   const [savingStatus, setSavingStatus] = useState("");
-  const [userGameStatuses, setUserGameStatuses] = useState({ playlist: false, played: false });
+  const [savedUserGame, setSavedUserGame] = useState(null);
   const [comments, setComments] = useState([]);
   const [commentText, setCommentText] = useState("");
   const [commentRating, setCommentRating] = useState("");
@@ -80,7 +33,6 @@ function GameDetail() {
   const [commentsError, setCommentsError] = useState("");
   const similarGamesListRef = useRef(null);
   const commentsSectionRef = useRef(null);
-  const visitedGameRef = useRef("");
 
   useEffect(() => {
     const fetchGame = async () => {
@@ -88,8 +40,6 @@ function GameDetail() {
         setLoading(true);
         const data = await gamedata();
         setAllGames(data);
-        console.log("Looking for game title:", gameTitle);
-        console.log("Available games:", data.map(g => g.title));
 
         const foundGame = data.find(g => g.title === gameTitle);
 
@@ -116,55 +66,32 @@ function GameDetail() {
       try {
         setCommentsLoading(true);
         setCommentsError("");
-        const gameCommentIds = getGameCommentIds(game, allGames);
         const allComments = await getComments();
-        const gameComments = allComments.filter((item) => gameCommentIds.includes(String(item.gameId)));
+        const gameComments = allComments.filter((item) => String(item.gameId) === getGameId(game));
         setComments(gameComments.reverse());
 
         const currentUser = getCurrentUser();
-        if (!currentUser?.id) return;
+        if (!currentUser?.id) {
+          setSavedUserGame(null);
+          return;
+        }
 
         const userGames = await getUserGames();
-        const currentGameUserGames = userGames.filter((item) => (
+        const currentGameUserGame = userGames.find((item) => (
           String(item.userId) === String(currentUser.id)
           && String(item.gameId) === getGameId(game)
         ));
 
-        setUserGameStatuses({
-          playlist: currentGameUserGames.some((item) => item.status?.trim().toLowerCase() === "playlist"),
-          played: currentGameUserGames.some((item) => item.status?.trim().toLowerCase() === "played"),
-        });
+        setSavedUserGame(currentGameUserGame || null);
       } catch (err) {
         console.error("Failed to load game activity:", err);
-        setCommentsError("Could not load comments.");
+        setCommentsError("Could not load comments or saved game.");
       } finally {
         setCommentsLoading(false);
       }
     };
 
     loadGameActivity();
-  }, [game, allGames]);
-
-  useEffect(() => {
-    const saveVisitedGame = async () => {
-      const currentUser = getCurrentUser();
-
-      if (!game || !currentUser?.id) return;
-
-      const visitedKey = `${currentUser.id}-${game.id ?? game.title}`;
-      if (visitedGameRef.current === visitedKey) return;
-
-      visitedGameRef.current = visitedKey;
-
-      try {
-        await saveUserGame(currentUser, game, "visited");
-      } catch (err) {
-        console.error("Failed to save visited game:", err);
-        visitedGameRef.current = "";
-      }
-    };
-
-    saveVisitedGame();
   }, [game]);
 
   if (loading) return <div className="game-detail-page"><h1>Loading...</h1></div>;
@@ -217,34 +144,75 @@ function GameDetail() {
     try {
       setSavingStatus(status);
       setActionMessage("");
-      const isAlreadySaved = userGameStatuses[status];
 
-      if (isAlreadySaved) {
-        await removeUserGame(currentUser, game, status);
-        setUserGameStatuses((previousStatuses) => ({ ...previousStatuses, [status]: false }));
+      const userGameData = {
+        userId: currentUser.id,
+        gameId: getGameId(game),
+        gameTitle: game.title,
+        gameImage: game.image,
+        gameRating: game.rating,
+        isPlaylist: status === "playlist" ? true : savedUserGame?.isPlaylist === true,
+        isPlayed: status === "played" ? true : savedUserGame?.isPlayed === true,
+        userRating: savedUserGame?.userRating || "",
+        dateAdded: savedUserGame?.dateAdded || new Date().toISOString(),
+      };
 
-        if (status === "playlist") {
-          setActionMessage("Removed from your play list.");
-        } else if (status === "played") {
-          setActionMessage("Removed from played games.");
-        }
-
-        return;
+      if (savedUserGame?.id) {
+        const updatedUserGame = await updateUserGame(savedUserGame.id, { ...savedUserGame, ...userGameData });
+        setSavedUserGame(updatedUserGame);
+      } else {
+        const newUserGame = await createUserGame(userGameData);
+        setSavedUserGame(newUserGame);
       }
 
-      await saveUserGame(currentUser, game, status);
-      setUserGameStatuses((previousStatuses) => ({ ...previousStatuses, [status]: true }));
-
-      if (status === "playlist") {
-        setActionMessage("Saved to your play list.");
-      } else if (status === "played") {
-        setActionMessage("Marked as played.");
-      }
+      setActionMessage(status === "playlist" ? "Saved to your play list." : "Marked as played.");
     } catch (err) {
       console.error("Failed to save user game:", err);
       setActionMessage("Could not save this game. Please try again.");
     } finally {
       setSavingStatus("");
+    }
+  };
+
+  const handleRemoveUserGame = async (status) => {
+    if (!savedUserGame?.id) return;
+
+    try {
+      setSavingStatus(status);
+      setActionMessage("");
+
+      const onlyInPlaylist = status === "playlist" && savedUserGame.isPlayed !== true;
+      const onlyInPlayed = status === "played" && savedUserGame.isPlaylist !== true;
+
+      if (onlyInPlaylist || onlyInPlayed) {
+        await deleteUserGame(savedUserGame.id);
+        setSavedUserGame(null);
+      } else {
+        const userGameData = {
+          ...savedUserGame,
+          isPlaylist: status === "playlist" ? false : savedUserGame.isPlaylist,
+          isPlayed: status === "played" ? false : savedUserGame.isPlayed,
+        };
+        const updatedUserGame = await updateUserGame(savedUserGame.id, userGameData);
+        setSavedUserGame(updatedUserGame);
+      }
+
+      setActionMessage(status === "playlist" ? "Removed from your play list." : "Removed from played games.");
+    } catch (err) {
+      console.error("Failed to remove user game:", err);
+      setActionMessage("Could not remove this game. Please try again.");
+    } finally {
+      setSavingStatus("");
+    }
+  };
+
+  const handleClickUserGame = (status) => {
+    const isSaved = status === "playlist" ? isInPlaylist : isPlayed;
+
+    if (isSaved) {
+      handleRemoveUserGame(status);
+    } else {
+      handleSaveUserGame(status);
     }
   };
 
@@ -282,18 +250,8 @@ function GameDetail() {
     }
   };
 
-  const handleDeleteComment = async (commentId) => {
-    try {
-      await deleteComment(commentId);
-      setComments((previousComments) => previousComments.filter((comment) => comment.id !== commentId));
-    } catch (err) {
-      console.error("Failed to delete comment:", err);
-      setCommentMessage("Could not delete comment. Please try again.");
-    }
-  };
-
-  const markButtonStatus = isUpcoming ? "playlist" : "played";
-  const markButtonActive = isUpcoming ? userGameStatuses.playlist : userGameStatuses.played;
+  const isInPlaylist = savedUserGame?.isPlaylist === true;
+  const isPlayed = savedUserGame?.isPlayed === true;
   const commentsLabel = comments.length === 1 ? "1 comment" : `${comments.length} comments`;
 
   return (<>
@@ -312,8 +270,8 @@ function GameDetail() {
 
           <img src={game.image} alt={game.title} />
 
-          <button className={`add-to-playlist ${userGameStatuses.playlist ? "usergame-active" : ""}`} onClick={() => handleSaveUserGame("playlist")} disabled={savingStatus === "playlist"}>
-            {userGameStatuses.playlist ? (
+          <button className={`add-to-playlist ${isInPlaylist ? "usergame-active" : ""}`} onClick={() => handleClickUserGame("playlist")} disabled={savingStatus === "playlist"}>
+            {isInPlaylist ? (
               <svg className="button-check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M20 6 9 17l-5-5" />
               </svg>
@@ -324,11 +282,11 @@ function GameDetail() {
                 <line x1="9" y1="11" x2="15" y2="11"></line>
               </svg>
             )}
-            {savingStatus === "playlist" ? "Saving..." : userGameStatuses.playlist ? isUpcoming ? "In wishlist" : "In play list" : isUpcoming ? "Add to wishlist" : "Add to play list"}</button>
+            {savingStatus === "playlist" ? "Saving..." : isInPlaylist ? "In play list" : "Add to play list"}</button>
 
 
-          <button className={`mark-as-played ${markButtonActive ? "usergame-active" : ""}`} onClick={() => handleSaveUserGame(markButtonStatus)} disabled={savingStatus === markButtonStatus}>
-            {markButtonActive ? (
+          <button className={`mark-as-played ${isPlayed ? "usergame-active" : ""}`} onClick={() => handleClickUserGame("played")} disabled={savingStatus === "played"}>
+            {isPlayed ? (
               <svg className="button-check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M20 6 9 17l-5-5" />
               </svg>
@@ -337,7 +295,7 @@ function GameDetail() {
                 <circle cx="12" cy="12" r="10" />
               </svg>
             )}
-            {savingStatus === markButtonStatus ? "Saving..." : markButtonActive ? isUpcoming ? "Notification on" : "Played" : isUpcoming ? "Notify me" : "Mark as Played"}</button>
+            {savingStatus === "played" ? "Saving..." : isPlayed ? "Played" : "Mark as Played"}</button>
 
           {actionMessage && <p className="game-action-message">{actionMessage}</p>}
         </div>
@@ -446,9 +404,6 @@ function GameDetail() {
                     <small>{item.date ? new Date(item.date).toLocaleDateString() : ""}</small>
                   </div>
                   <p>{item.comment}</p>
-                  {item.id && String(item.userId) === String(currentUser?.id) && (
-                    <button type="button" onClick={() => handleDeleteComment(item.id)}>Delete</button>
-                  )}
                 </div>
               ))
             ) : (
